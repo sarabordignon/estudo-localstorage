@@ -1,0 +1,99 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200&display=swap');
+
+body {
+    background-color: #a6a6a6;
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+    padding: 10px;
+}
+
+h1 {
+    color: black;
+    letter-spacing: 5px;
+    font-size: 60px;
+}
+
+main {
+    margin-top: 130px;
+}
+
+.aba {
+    color: black;
+    background-color: white;
+    border: none;
+    font-size: 25px;
+    border-radius: 5px;
+    padding: 6px;
+}
+
+.aba.ativa {
+    background-color: grey;
+    color: black;
+}
+
+.tela {
+    display: none;
+}
+
+.tela.ativa {
+    display: block;
+}
+
+.rotulo {
+    font-size: 25px;
+    margin-top: 50px;
+}
+
+.previa {
+    margin-top: 50px;
+    margin-bottom: 50px;
+    font-size: 15px;
+    color: black;
+}
+
+#numerovoto {
+    width: 80px;
+    height: 80px;
+    font-size: 50px;
+    text-align: center;
+    border-radius: 5px;
+    border: none;
+}
+
+.branco {
+    padding: 6px;
+    color: black;
+    border-radius: 5px;
+    border: none;
+    font-size: 25px;
+    background-color: white;
+}
+
+.corrige {
+    padding: 6px;
+    color: black;
+    border-radius: 5px;
+    border: none;
+    font-size: 25px;
+    background-color: #f26522;
+}
+
+.confirma {
+    padding: 6px;
+    color: black;
+    border-radius: 5px;
+    border: none;
+    font-size: 25px;
+    background-color: #00a859;
+}
+
+nav {
+    display: center;
+    gap: 10px;
+}
+
+#fim {
+    display: none;
+    margin-top: 30px;
+    font-size: 80px;
+}

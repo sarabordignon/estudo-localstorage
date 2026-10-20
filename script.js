@@ -9,7 +9,15 @@ function salvarCandidatos(candidatos) {
     localStorage.setItem("candidatos", JSON.stringify(candidatos));
 }
 
+
+function carregarVotos() {
+    const dados = localStorage.getItem("votos");
+    return dados ? JSON.parse(dados) : {};
+ 
+}
+
 function salvarVotos(votos) {
+
     localStorage.setItem("votos", JSON.stringify(votos));
 }
 
@@ -32,15 +40,15 @@ abas.forEach(function (aba) {
 });
 
 // --- Cadastro de candidatos 
-const formaCandidato = document.getElementById("formCandidato");
+
+const formCandidato = document.getElementById("formCandidato");
 const listaCandidatos = document.getElementById("listaCandidatos");
 
 formCandidato.addEventListener("submit", function (evento) {
     evento.preventDefault();
 
-    const nome = document.getElementById("nomeCandidato").ariaValueMax.trim();
-    const numero = document.getElementById("numeroCandidato").ariaValueMax.trim();
-
+    const nome = document.getElementById("nomeCandidato").value.trim();
+    const numero = document.getElementById("numeroCandidato").value.trim();
     const candidatos = carregarCandidatos();
 
     const existente = candidatos.find(c => c.numero === numero);
@@ -68,11 +76,12 @@ function mostrarCandidatos() {
     candidatos.forEach(function (candidato) {
         const li = document.createElement("li");
         li.innerHTML = `
-        <span><strong>${candidato.numero}</strong> - ${numero.nome}</span>
+        <span><strong>${candidato.numero}</strong> - ${candidato.nome}</span>
         <button onClick="removerCandidato('${candidato.numero}')">Remover</button>`;
         listaCandidatos.appendChild(li);
     });
 }
+
 
 function removerCandidato(numero) {
     const candidatos = carregarCandidatos().filter(c => c.numero !== numero);
@@ -85,7 +94,7 @@ function removerCandidato(numero) {
 const inputVoto = document.getElementById("numerovoto");
 const previa = document.getElementById("previa");
 const telaFim = document.getElementById("fim");
-const urna = document.getElementById(".urna");
+const urna = document.querySelector(".urna");
 
 inputVoto.addEventListener("input", function () { 
     inputVoto.value = inputVoto.value.replace(/\D/g, "");
@@ -105,28 +114,31 @@ function atualizarPrevia() {
     if(candidato) {
         previa.innerHTML = `Candidato: <strong>${candidato.nome}</strong>`;
        } else {
-        previa.innerHTML = `<spán class="nulo">Número Errado - Voto Nulo</span>`;
+        previa.innerHTML = `<span class="nulo">Número Errado - Voto Nulo</span>`;
        } 
     }
 
     function registrarVoto(chave) {
         const votos = carregarVotos();
         votos[chave] = (votos[chave] || 0) + 1;
-        salvarVotos();
+        
+        salvarVotos(votos);
         mostrarFim();
     }
 
-    document.getElementById("btnConfirma").addEventListener("click", function () {
-        const numero = inputVoto.value;
+    
+    document.getElementById('btnConfirma').addEventListener('click', function () {
+    const numero = inputVoto.value;
+    
+    if (numero.length < 2) {
+        alert('Digite o número do candidato (2 dígitos).');
+        return;
+    }
+    
+    const candidato = carregarCandidatos().find(c => c.numero === numero);
+    registrarVoto(candidato ? numero : 'nulo');
+});
 
-        if(numero.length < 2) {
-            alert("Digite o número do candidato (2 dígitos).");
-            return;
-        }
-        
-        const candidato = carregarCandidatos().find(c => c.numero === numero);
-        registrarVoto(candidato ? numero : "nulo");
-    });
 
     document.getElementById("btnBranco").addEventListener("click", function() {
         registrarVoto("branco");
@@ -141,7 +153,7 @@ function atualizarPrevia() {
     }
 
     function mostrarFim() {
-        urna.style.previa = "none";
+        urna.style.display = "none";
         telaFim.style.display = "block";
 
 
@@ -159,7 +171,8 @@ function mostrarResultado() {
 
     const resultado = candidatos.map(c => ({
         nome: `${c.numero} - ${c.nome}`,
-        qdt: votos[c.numero] || 0
+        
+        qtd: votos[c.numero] || 0
     }));
     resultado.push({nome: "Brancos", qtd: votos.branco || 0});
     resultado.push({nome: "Nulos", qtd: votos.nulo || 0});
@@ -172,13 +185,14 @@ function mostrarResultado() {
     lista.innerHTML = "";
     resultado.forEach(function (item) {
         const porcentagem = total > 0 ? ((item.qtd / total) * 100).toFixed(1) : 0;
+
         lista.innerHTML += `
         <div class="item-resultado">
          <div class="linha">
-            <span>${item.nome}</nome>
+            <span>${item.nome}</span>
             <span>${item.qtd} voto(s) - ${porcentagem}%</span>
         </div>
-        <div class="barra"><div style="width: ${porcentagem}%></div><div>
+        <div class="barra"><div style="width: ${porcentagem}%"></div></div>
         </div>`;
     });
 }
@@ -191,10 +205,3 @@ document.getElementById("btnZerar").addEventListener("click", function () {
 });
 
 inputVoto.focus();
-
-
-
-
-
-
-
